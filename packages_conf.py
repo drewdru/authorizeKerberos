@@ -1,0 +1,36 @@
+APT_PACKAGES = [
+    'sudo', 
+    'wget',
+    'curl',
+    'llvm',
+    'locales',
+    'network-manager',
+    # python dependencies
+    'build-essential',
+    'checkinstall',
+    'libreadline-gplv2-dev',
+    'libssl-dev',
+    'libsqlite3-dev',
+    'tk-dev',
+    'libgdbm-dev',
+    'libc6-dev',
+    'libbz2-dev',  
+    'zlib1g-dev',
+    # python
+    'python-pip',
+    'python3-distutils-extra', 
+    'python3-dbus', 
+    'python3-dev', 
+    'python3-pip', 
+    'python3-venv', 
+    'python-dev',
+    # Kerberos
+    'xdg-utils', 
+    'krb5-user', 
+    'samba', 
+    'winbind', 
+    'libpam-krb5', 
+    'libpam-winbind', 
+    'libnss-winbind', 
+    'ntp'
+]
