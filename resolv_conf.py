@@ -1,3 +1,4 @@
+#! ./env/bin/python
 import file_helper
 
 def get_dhclient_data(dhclient_conf_path):
@@ -35,7 +36,7 @@ def update_resolv_conf(app_conf):
         file_helper.add_string_to_file('search {}'.format(app_conf['DOMAIN']), resolv_conf_path)
     for dns in app_conf['DNS_LIST']:
         file_helper.add_string_to_file('nameserver {}'.format(dns['ip']), resolv_conf_path)
-    if app_conf['is_DHCP']:
+    if app_conf['IS_DHCP']:
         file_helper.add_string_to_file('supersede domain-name "{}"'.format(app_conf['DOMAIN']), 
             '/etc/dhcp/dhclient.conf')
         add_DNS_to_DHCP_config(app_conf)

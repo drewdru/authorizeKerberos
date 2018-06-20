@@ -1,3 +1,4 @@
+#! ./env/bin/python
 import file_helper
 
 def set_hosts(app_conf):

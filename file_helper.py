@@ -1,3 +1,4 @@
+#! ./env/bin/python
 import os
 def add_string_to_file(text, file_name):
     with open(file_name, "r+") as file:

@@ -1,3 +1,4 @@
+#! ./env/bin/python
 def get_krb5_server_params(app_conf):
     kdc_list = []
     admin_server = ''

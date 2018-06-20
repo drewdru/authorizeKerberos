@@ -1,3 +1,5 @@
+#!./env/bin/python
+# -*- coding: utf-8 -*-
 import config
 
 def ask_yes_or_no(question):
@@ -25,6 +27,7 @@ def get_DNS_LIST():
         is_admin_server = False
         if is_havent_admin_server:
             is_admin_server = ask_yes_or_no('Является ли первичным DNS сервером домена?')
+            is_havent_admin_server = False
         DNS_LIST.append({
             'host': host,
             'ip': ip,
@@ -45,7 +48,7 @@ def get_params():
             DOMAIN = input('Домен для входа (example.com): ')
             DNS_LIST = get_DNS_LIST()
             HOSTNAME = input('HOSTNAME данного компьютера (smbsrv01): ')
-            TIME_SERVER = input('Сервер для автоматической синхронизации (dc.domain.com)')
+            TIME_SERVER = input('Сервер для автоматической синхронизации (dc.domain.com): ')
             IS_AUTO_RESOLV = ask_yes_or_no('Поддерживает ли сервер автоматическое создание файла resolv.conf?')
             IS_DHCP = ask_yes_or_no('IP-адрес динамический и присваивается DHCP сервером?')
             return {
