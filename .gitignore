@@ -1,5 +1,6 @@
 .vscode
 env/
+Python-3.6.5*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
