@@ -1,10 +1,14 @@
 APT_PACKAGES = [
     'sudo', 
+    'apt-utils',
     'wget',
     'curl',
     'llvm',
     'locales',
     'network-manager',
+    'tar',
+    'virtualenv',
+    'xz-utils',
     # python dependencies
     'build-essential',
     'checkinstall',
@@ -16,6 +20,8 @@ APT_PACKAGES = [
     'libc6-dev',
     'libbz2-dev',  
     'zlib1g-dev',
+    'libncurses5-dev',
+    'libncursesw5-dev',
     # python
     'python-pip',
     'python3-distutils-extra', 
@@ -26,11 +32,16 @@ APT_PACKAGES = [
     'python-dev',
     # Kerberos
     'xdg-utils', 
+    'krb5-config',
     'krb5-user', 
+    'libgssrpc4', 
+    'libkadm5clnt-mit11',
+    'libkadm5srv-mit11',
+    'libkdb5-8',
     'samba', 
     'winbind', 
     'libpam-krb5', 
     'libpam-winbind', 
     'libnss-winbind', 
-    'ntp'
+    'ntp',
 ]

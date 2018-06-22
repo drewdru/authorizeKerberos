@@ -48,7 +48,7 @@ def get_params():
             DOMAIN = input('Домен для входа (example.com): ')
             DNS_LIST = get_DNS_LIST()
             HOSTNAME = input('HOSTNAME данного компьютера (smbsrv01): ')
-            TIME_SERVER = input('Сервер для автоматической синхронизации (dc.domain.com): ')
+            TIME_SERVER = input('Сервер для автоматической синхронизации времени (dc.domain.com): ')
             IS_AUTO_RESOLV = ask_yes_or_no('Поддерживает ли сервер автоматическое создание файла resolv.conf?')
             IS_DHCP = ask_yes_or_no('IP-адрес динамический и присваивается DHCP сервером?')
             return {

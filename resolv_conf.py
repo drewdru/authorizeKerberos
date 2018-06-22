@@ -1,4 +1,5 @@
 #! ./env/bin/python
+# -*- coding: utf-8 -*-
 import file_helper
 
 def get_dhclient_data(dhclient_conf_path):
@@ -16,6 +17,18 @@ def get_dhclient_data(dhclient_conf_path):
         return ip_list, old_line, is_have_DNS
 
 def add_DNS_to_DHCP_config(app_conf):
+    try:
+        with open('/etc/network/interfaces', "r+") as file:
+            for line in file:
+                if 'allow-hotplug eth0' in line:
+                    break
+                if 'iface eth0 inet dhcp' in line:
+                    break
+            else:
+                file.write('\nallow-hotplug eth0\niface eth0 inet dhcp')
+    except FileNotFoundError:
+        os.system('echo "\nallow-hotplug eth0\niface eth0 inet dhcp" > /etc/network/interfaces')
+
     dhclient_conf_path = '/etc/dhcp/dhclient.conf'
     ip_list, old_line, is_have_DNS = get_dhclient_data(dhclient_conf_path)
     for dns in app_conf['DNS_LIST']:
@@ -40,3 +53,5 @@ def update_resolv_conf(app_conf):
         file_helper.add_string_to_file('supersede domain-name "{}"'.format(app_conf['DOMAIN']), 
             '/etc/dhcp/dhclient.conf')
         add_DNS_to_DHCP_config(app_conf)
+        if os.system('sudo /etc/init.d/network-manager restart') != 0:
+            os.system('sudo /etc/init.d/networking restart')
