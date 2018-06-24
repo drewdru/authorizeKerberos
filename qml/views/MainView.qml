@@ -4,7 +4,8 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
-import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.1
+import "../js/mainView.js" as MVjs
 
 Item {
     id: mainView
@@ -13,13 +14,6 @@ Item {
 
     anchors.fill: parent
     anchors.margins: 10
-
-    // Rectangle
-    // {
-    //     id: background
-    //     color: "white"
-    //     anchors.fill: parent
-    // }
 
     Flickable {
         id: flickableArea
@@ -58,10 +52,6 @@ Item {
                 text: qsTr("IP-адрес динамический и присваивается DHCP сервером?")
             }
             ColumnLayout {
-                // Rectangle {
-                //     anchors.fill: parent
-                //     color: "red"
-                // }
                 RowLayout {
                     Label {
                         text: qsTr("Домен для входа:\t")
@@ -78,23 +68,31 @@ Item {
                             text: qsTr("Домен для входа. Пример: example.com")
                             delay: 1000
                         }
-
+                    }
+                    Rectangle {
+                        id: domainError
+                        anchors.fill: parent
+                        color: "#00FF0055"
+                        visible: true
                     }
                 }
+                ButtonGroup { id: radioGroup }
                 Repeater {
                     id: dns_list
-                    model: 0
-                    ColumnLayout {
+                    model: ListModel {
+                        id: modelTest;
+                    }
+                    delegate: ColumnLayout {
+                        property string host: ""
+                        property string ip: ""
+                        property bool is_admin_server: false
                         RowLayout {
-                            property string host: ""
-                            property string ip: ""
-                            property bool is_admin_server: false
                             Label {
-                                text: qsTr("Имя DNS сервер:\t")
+                                text: qsTr("Имя DNS сервера:\t")
                             }
                             TextField {
                                 Layout.fillWidth: true
-                                text: parent.host
+                                text: model.host
                                 // validator: validator: RegExpValidator { regExp: /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/ }
                                 // inputMethodHints: Qt.ImhNone
                                 placeholderText: qsTr("dc")
@@ -105,40 +103,26 @@ Item {
                                     delay: 1000
                                 }
                             }
-                            // TextField {
-                            //     color: "red"
-                            //     Layout.fillWidth: true
-                            //     text: parent.ip
-                            //     // validator: RegExpValidator {
-                            //     //     regExp:  /^\d{9}$/
-                            //     // }
-                            //     // validator: RegExpValidator { regExp: /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/ }
-                            //     // inputMethodHints: Qt.ImhDigitsOnly
-                            //     // inputMask: "000.000.000.000;_"
-                            //     placeholderText: qsTr("192.168.0.1")
-                            //     ToolTip {
-                            //         x: 0
-                            //         visible: parent.hovered
-                            //         text: qsTr("Домен для входа. Пример: example.com")
-                            //         delay: 1000
-                            //     }
-                            // }
+                            Rectangle {
+                                // id: modelHostError
+                                anchors.fill: parent
+                                color: "#00FF0055"
+                                visible: true
+                            }
                         }
                         RowLayout {
-                            property string host: ""
-                            property string ip: ""
-                            property bool is_admin_server: false
                             Label {
                                 text: qsTr("IP адрес DNS:\t")
                             }
                             TextField {
                                 Layout.fillWidth: true
-                                text: parent.ip
+                                text: model.ip
                                 validator: RegExpValidator {
                                     regExp:  /^((?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.){0,3}(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/
                                 }
                                 // validator: RegExpValidator { regExp: /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/ }
                                 // inputMethodHints: Qt.ImhNone
+                                // inputMask: "000.000.000;"
                                 placeholderText: qsTr("192.168.0.1")
                                 ToolTip {
                                     x: 0
@@ -147,21 +131,28 @@ Item {
                                     delay: 1000
                                 }
                             }
+                            Rectangle {
+                                // id: modelIpError
+                                anchors.fill: parent
+                                color: "#00FF0055"
+                                visible: true
+                            }
+                        }
+                        RadioButton {
+                            text: "Является первичным DNS сервером домена?"
+                            checked: model.is_auto_resolv  
+                            ButtonGroup.group: radioGroup                  
                         }
                     }
-                    // Rectangle {
-                    //     width: 100; height: 40
-                    //     border.width: 1
-                    //     color: "yellow"
-                    // }
                 }
             }
             Button {
                 text: "Добавить DNS сервер"
                 onClicked: { 
-                    ++dns_list.model
-                    dns_list.itemAt(0)
-                    PyConsole.log("test")
+                    modelTest.append({ip: "", host: "", is_auto_resolv: true})
+                    // ++dns_list.model
+                    // dns_list.itemAt(0)
+                    // PyConsole.log("test")
                 }
             }
             RowLayout {
@@ -180,7 +171,12 @@ Item {
                         text: qsTr("HOSTNAME данного компьютера. Пример: smbsrv01")
                         delay: 1000
                     }
-
+                }
+                Rectangle {
+                    id: hostnameError
+                    anchors.fill: parent
+                    color: "#00FF0055"
+                    visible: true
                 }
             }
             RowLayout {
@@ -199,7 +195,12 @@ Item {
                         text: qsTr("Сервер для автоматической синхронизации времени. Пример: dc.domain.com")
                         delay: 1000
                     }
-
+                }
+                Rectangle {
+                    id: time_serverError
+                    anchors.fill: parent
+                    color: "#00FF0055"
+                    visible: true
                 }
             }
             Button {
@@ -207,11 +208,104 @@ Item {
                 width: parent.width
                 onClicked: {
                     mainView.enabled = false
-                    // filtersController.gaussianBlur(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
-                    mainView.enabled = true
-                    // mainView.updateProcessingImage()
+                    if (validate()) {
+                        // TODO: search why doen't work
+                        // dns_list.model.sync()
+                        // var test = MVjs.dns_listToList(dns_list.model)
+                        var dns_array = []
+                        for(var i = 0; i < dns_list.model.count; ++i) {
+                            var host = dns_list.itemAt(i).children[0].children[1]
+                            var ip = dns_list.itemAt(i).children[1].children[1]
+                            var is_admin_server = dns_list.itemAt(i).children[2].children[1]
+                            dns_array.push({
+                                host: host.text,
+                                ip: ip.text,
+                                is_admin_server: is_admin_server.checked,
+                            }) 
+                        }
+                        mainController.update_configs(is_auto_resolv.checked, is_dhcp.checked, domain.text, dns_array, hostname.text, time_server.text)
+                        mainView.enabled = true
+                        completeDialog.open()
+                    } else {
+                        mainView.enabled = true
+                        failDialog.open()
+                    }
                 }
             }
         }
+    }
+    function validate() {
+        var is_valid = true
+        if (domain.text.length == 0) {
+            domainError.color = "#55FF0055"
+            is_valid = false
+        } else {
+            domainError.color = "#00FF0055"
+        }
+        if (hostname.text.length == 0) {
+            hostnameError.color = "#55FF0055"
+            is_valid = false
+        } else {
+            hostnameError.color = "#00FF0055"
+        }
+        if (time_server.text.length == 0) {
+            time_serverError.color = "#55FF0055"
+            is_valid = false
+        } else {
+            time_serverError.color = "#00FF0055"
+        }
+        
+        var test = []
+        var count = dns_list.model.count
+        for(var i = 0; i < count; ++i) {
+            var host = dns_list.itemAt(i).children[0].children[1]
+            var ip = dns_list.itemAt(i).children[1].children[1]
+
+            var hostError = dns_list.itemAt(i).children[0].children[2]
+            var ipError = dns_list.itemAt(i).children[1].children[2]
+            
+            if (host.text.length == 0) {
+                hostError.color = "#55FF0055"
+                is_valid = false
+            } else {
+                hostError.color = "#00FF0055"
+            }
+            if (ip.text.length == 0) {
+                ipError.color = "#55FF0055"
+                is_valid = false
+            } else {
+                ipError.color = "#00FF0055"
+            }
+            var ip_list = ip.text.split(".")
+            if (ip_list.length < 4 ) {
+                ipError.color = "#55FF0055"
+                is_valid = false
+            } else {
+                var valid_ip = ""
+                for(var i = 0; i < 4; ++i) {
+                    valid_ip += parseInt(ip_list[i], 10).toString()
+                    if (i < 3) {
+                        valid_ip += "."
+                    }
+                }
+                if (ip.text != valid_ip) {
+                    ipError.color = "#55FF0055"
+                    is_valid = false
+                } else {
+                    ipError.color = "#00FF0055"
+                }
+            }
+        }
+        return is_valid
+    }
+    MessageDialog {
+        id: completeDialog
+        title: "Готово"
+        text: "Настройки обновлены"
+    }
+    MessageDialog {
+        id: failDialog
+        title: "Ошибка"
+        text: "Некоторые поля заполнены неправильно"
     }
 }
