@@ -3,7 +3,7 @@ services:
   app:
     build: .
     volumes:
-      - .:/code
+      - .:/authorizeKerberos
     command: bash -c "./main.py"
     environment:
       - LC_ALL=en_US.UTF-8
