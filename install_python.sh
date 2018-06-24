@@ -21,9 +21,11 @@ else
     rm -rf ./env
 fi
 
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' virtualenv|grep "install ok installed")
-echo Checking for virtualenv: $PKG_OK
-if [ "" == "$PKG_OK" ]; then
+# PKG_OK=$(dpkg-query -W --showformat='${Status}\n' virtualenv|grep "install ok installed")
+# echo Checking for virtualenv: $PKG_OK
+# if ["" == "$PKG_OK"]; then
+dpkg -l virtualenv | grep "ii  virtualenv" -c
+if [ $? -eq 0 ]; then
     sudo apt-get update && apt-get -y upgrade
     sudo apt-get -y install virtualenv
 fi

@@ -37,7 +37,7 @@ APT_PACKAGES = [
     'libgssrpc4', 
     'libkadm5clnt-mit11',
     'libkadm5srv-mit11',
-    'libkdb5-8',
+    # 'libkdb5-8',
     'samba', 
     'winbind', 
     'libpam-krb5', 

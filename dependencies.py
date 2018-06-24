@@ -21,7 +21,6 @@ def install_apt_packages():
     if 'apt-utils' in APT_PACKAGES:
         os.system('sudo apt-get install -y --no-install-recommends apt-utils')
     if 'krb5-user' in APT_PACKAGES:
-        print('KRB5!!!!!!!!!!!!!!!!!!!!!')
         # os.system('export DEBIAN_FRONTEND=teletype')
         # os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
         os.system('yes "\n" | sudo apt-get -y --assume-yes install krb5-user')
@@ -35,6 +34,7 @@ def update_packages():
     for apt_package in APT_PACKAGES:
         is_install = os.system('dpkg -l {} | grep "ii  {}"'.format(apt_package, apt_package))
         if is_install != 0:
+            print('{} does not install !!!!!!!!!!!!!!!!!!!!'.format(apt_package))
             if os.system('sudo apt-get -v') != 0:
                 install_sudo()
             install_apt_packages()

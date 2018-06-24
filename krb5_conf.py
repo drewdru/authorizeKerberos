@@ -14,6 +14,8 @@ def change_krb5_conf(app_conf):
     with open('./krb5.conf', 'r') as fin:
         with open('/etc/krb5.conf', 'w') as fout:
             fin_data = fin.read()
+            if admin_server == '':
+                fin_data.replace('admin_server =', '')
             fout.write(fin_data.format(
                 app_conf['DOMAIN'].upper(),
                 app_conf['DOMAIN'].upper(),

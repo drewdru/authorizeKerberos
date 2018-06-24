@@ -37,29 +37,39 @@ def get_DNS_LIST():
         if not is_add_DNS:
             break
     return DNS_LIST
-    
 
-def get_params():
+def get_params(app_conf):
     while(True):
-        answer = input('Использовать настройки из файла config.py или ввести вручную? [1-2]: ')
+        answer = input('Использовать настройки из файла config.py для оставшихся параметров или ввести вручную? [1-2]: ')
         if answer == '1':
-            return config.app_conf
+            if 'DOMAIN' not in app_conf:
+                app_conf['DOMAIN'] = config.app_conf['DOMAIN']
+            if 'DNS_LIST' not in app_conf:
+                app_conf['DNS_LIST'] = config.app_conf['DNS_LIST']
+            if 'HOSTNAME' not in app_conf:
+                app_conf['HOSTNAME'] = config.app_conf['HOSTNAME']
+            if 'TIME_SERVER' not in app_conf:
+                app_conf['TIME_SERVER'] = config.app_conf['TIME_SERVER']
+            if 'IS_AUTO_RESOLV' not in app_conf:
+                app_conf['IS_AUTO_RESOLV'] = config.app_conf['IS_AUTO_RESOLV']
+            if 'IS_DHCP' not in app_conf:
+                app_conf['IS_DHCP'] = config.app_conf['IS_DHCP']
         elif answer == '2':
-            DOMAIN = input('Домен для входа (example.com): ')
-            DNS_LIST = get_DNS_LIST()
-            HOSTNAME = input('HOSTNAME данного компьютера (smbsrv01): ')
-            TIME_SERVER = input('Сервер для автоматической синхронизации времени (dc.domain.com): ')
-            IS_AUTO_RESOLV = ask_yes_or_no('Поддерживает ли сервер автоматическое создание файла resolv.conf?')
-            IS_DHCP = ask_yes_or_no('IP-адрес динамический и присваивается DHCP сервером?')
-            return {
-                'DOMAIN': DOMAIN,
-                'DNS_LIST': DNS_LIST,
-                'HOSTNAME': HOSTNAME,
-                'TIME_SERVER': TIME_SERVER,
-                'IS_AUTO_RESOLV': IS_AUTO_RESOLV,
-                'IS_DHCP': IS_DHCP
-            }
+            if 'DOMAIN' not in app_conf:
+                app_conf['DOMAIN'] = input('Домен для входа (example.com): ')
+            if 'DNS_LIST' not in app_conf:
+                app_conf['DNS_LIST'] = get_DNS_LIST()
+            if 'HOSTNAME' not in app_conf:
+                app_conf['HOSTNAME'] = input('HOSTNAME данного компьютера (smbsrv01): ')
+            if 'TIME_SERVER' not in app_conf:
+                app_conf['TIME_SERVER'] = input('Сервер для автоматической синхронизации времени (dc.domain.com): ')
+            if 'IS_AUTO_RESOLV' not in app_conf:
+                app_conf['IS_AUTO_RESOLV'] = ask_yes_or_no('Поддерживает ли сервер автоматическое создание файла resolv.conf?')
+            if 'IS_DHCP' not in app_conf:
+                app_conf['IS_DHCP'] = ask_yes_or_no('IP-адрес динамический и присваивается DHCP сервером?')
         else:
             print('Ошибка ввода!')
             print('Введите 1, чтобы использовать настройки из файла config.py')
             print('Введите 2, чтобы ввести параметры вручную')
+            continue
+        return app_conf

@@ -10,13 +10,11 @@ def install_apt_packages():
     os.system('sudo apt-get -y dist-upgrade')
     os.system('sudo apt-get -y --assume-yes install {}'.format(' '.join(APT_PACKAGE_LIST)))
 
-    os.system('sudo ./env/bin/pip install --upgrade pip')
-    os.system('sudo ./env/bin/pip install PyQt5')
-
 try:
     import PyQt5
 except ImportError:
-    install_apt_packages()
+    os.system('sudo ./env/bin/pip install --upgrade pip')
+    os.system('./env/bin/pip install PyQt5')
     import PyQt5
 
 def update_packages():

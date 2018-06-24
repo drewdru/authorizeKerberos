@@ -1,8 +1,7 @@
 ROOT_USER=root
 USERNAME=$(whoami)
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' sudo|grep "install ok installed")
-echo Checking for somelib: $PKG_OK
-if [ "" == "$PKG_OK" ]; then
+dpkg -l sudo | grep "ii  sudo" -c
+if [ $? -eq 0 ]; then
     echo "sudo не установлен. Введите пароль администратора для начала установки"
     su -c "apt-get update"
     su -c "apt-get -y upgrade"
