@@ -3,6 +3,9 @@ env/
 Python-3.6.5*
 *.qmlc
 *.jsc
+dependencies_gui
+authorizeKerberos.tar.xz
+image_authorizekerberos_app.tar
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
